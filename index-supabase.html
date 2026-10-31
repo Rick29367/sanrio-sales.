@@ -505,13 +505,10 @@
 
     <!-- Script de Interatividade, Estado das Vendas e Sons Kawaii -->
     <script>
-        const STORAGE_KEY = 'vendas_hello_kitty_sanrio_v4';
-        const SYNC_KEY_STORE = 'hk_sync_key';
         let sales = [];
         let currentFilter = 'all';
         let saleToDeleteId = null;
         let currentImageData = '';
-        let userSyncKey = localStorage.getItem(SYNC_KEY_STORE) || 'SANRIO-' + Math.floor(100000 + Math.random() * 900000);
 
         // Inicializador da Aplicação
         // O carregamento agora é feito após autenticação no Supabase.
@@ -532,48 +529,6 @@
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
-        }
-
-        function loadSales() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                try {
-                    sales = JSON.parse(stored);
-                } catch (e) {
-                    sales = [];
-                }
-            } else {
-                sales = [
-                    {
-                        id: '101',
-                        datetime: getCurrentDateTime(),
-                        client: 'Juliana Paes 🎀',
-                        product: 'Perfume Hello Kitty Floral',
-                        value: 120.00,
-                        paymentType: 'avista',
-                        dueDate: '',
-                        status: 'pago',
-                        image: ''
-                    },
-                    {
-                        id: '102',
-                        datetime: getCurrentDateTime(),
-                        client: 'Beatriz Lima ✨',
-                        product: 'Bolsa My Melody',
-                        value: 95.00,
-                        paymentType: 'aprazo',
-                        dueDate: getCurrentDate(),
-                        status: 'pendente',
-                        image: ''
-                    }
-                ];
-                saveSales();
-            }
-        }
-
-        function saveSales() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(sales));
-            updateMetrics();
         }
 
         // Gerador de Som Kawaii via Web Audio API
