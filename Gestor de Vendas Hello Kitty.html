@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Evita Cache Antigo no Safari e Chrome -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Hello Kitty & Friends Vendas 🎀</title>
+    
+    <!-- Configurações para App Instalável PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sanrio Vendas">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#ff1493">
+
+    <!-- Ícone SVG Embutido da Hello Kitty -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23ff1493'/><ellipse cx='50' cy='55' rx='35' ry='28' fill='%23FFFFFF'/><path d='M 22 35 Q 18 15 35 28 Z' fill='%23FFFFFF'/><path d='M 78 35 Q 82 15 65 28 Z' fill='%23FFFFFF'/><circle cx='70' cy='28' r='7' fill='%23ff1493'/><ellipse cx='38' cy='55' rx='3' ry='5' fill='%23333'/><ellipse cx='62' cy='55' rx='3' ry='5' fill='%23333'/><ellipse cx='50' cy='60' rx='4' ry='3' fill='%23ffda6a'/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23ff1493'/><ellipse cx='50' cy='55' rx='35' ry='28' fill='%23FFFFFF'/><path d='M 22 35 Q 18 15 35 28 Z' fill='%23FFFFFF'/><path d='M 78 35 Q 82 15 65 28 Z' fill='%23FFFFFF'/><circle cx='70' cy='28' r='7' fill='%23ff1493'/><ellipse cx='38' cy='55' rx='3' ry='5' fill='%23333'/><ellipse cx='62' cy='55' rx='3' ry='5' fill='%23333'/><ellipse cx='50' cy='60' rx='4' ry='3' fill='%23ffda6a'/></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hkPink: '#ff69b4',
+                        hkDeepPink: '#ff1493',
+                        hkPurple: '#9370db',
+                        hkRed: '#ff2a5f'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Quicksand', -apple-system, sans-serif !important;
+            background-color: #fff5f8 !important;
+            background-image: radial-gradient(#ffb6c1 0.8px, transparent 0.8px);
+            background-size: 18px 18px;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        .hk-shadow {
+            box-shadow: 0 10px 25px -5px rgba(255, 105, 180, 0.22);
+        }
+        svg { max-width: 100%; display: block; }
+
+        /* Animações Kawaii Sanrio Avançadas */
+        @keyframes floatCute {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-7px) rotate(3deg); }
+        }
+        @keyframes pulseSoft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        @keyframes bounceCute {
+            0%, 100% { transform: scale(1); }
+            30% { transform: scale(1.28) rotate(-12deg); }
+            60% { transform: scale(0.88) rotate(6deg); }
+            80% { transform: scale(1.12); }
+        }
+        @keyframes spinFlower {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.35); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        @keyframes shakeKuromi {
+            0%, 100% { transform: translateX(0) rotate(0); }
+            20% { transform: translateX(-5px) rotate(-10deg); }
+            40% { transform: translateX(5px) rotate(10deg); }
+            60% { transform: translateX(-5px) rotate(-10deg); }
+            80% { transform: translateX(5px) rotate(10deg); }
+        }
+        @keyframes floatUpFade {
+            0% { opacity: 1; transform: translateY(0) scale(0.8); }
+            100% { opacity: 0; transform: translateY(-45px) scale(1.5); }
+        }
+
+        .sanrio-card-anim {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .sanrio-card-anim:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 18px 35px -5px rgba(255, 105, 180, 0.4);
+        }
+        .sanrio-avatar-anim {
+            animation: floatCute 3.5s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+        .sanrio-card-anim:hover .sanrio-avatar-anim {
+            transform: scale(1.15) rotate(-5deg);
+        }
+
+        /* Efeitos de Clique Interativo nos Personagens */
+        .anim-hk-click { animation: bounceCute 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
+        .anim-cinnamoroll-click { animation: floatCute 0.4s ease-in-out 2 !important; }
+        .anim-melody-click { animation: spinFlower 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
+        .anim-kuromi-click { animation: shakeKuromi 0.5s ease-in-out !important; }
+
+        .btn-kawaii {
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .btn-kawaii:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+        .btn-kawaii:active {
+            transform: scale(0.92);
+        }
+        
+        /* Partícula de Brilho Dinâmica */
+        .sparkle-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 22px;
+            animation: floatUpFade 0.8s ease-out forwards;
+        }
+
+        /* Modal Bounce */
+        .modal-bounce-enter {
+            animation: bounceCute 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+<body class="text-slate-700 min-h-screen flex flex-col antialiased pb-16 pt-2">
+
+    <!-- Header Navbar Sanrio Limpo e Desencavalado (Sem sticky para não aglomerar no celular) -->
+    <header class="bg-gradient-to-r from-hkPink via-hkDeepPink to-hkPink text-white shadow-md border-b-4 border-pink-200 rounded-b-3xl mx-2 sm:mx-4 mt-2">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3 text-center sm:text-left">
+                <!-- Hello Kitty Icon Head com Interação de Som e Pulo -->
+                <div onclick="interactCharacter('hk-head', 'hk')" class="w-12 h-12 bg-white rounded-2xl shadow-inner p-1 flex items-center justify-center border-2 border-pink-200 transform hover:rotate-12 hover:scale-110 transition duration-300 cursor-pointer shrink-0">
+                    <svg id="hk-head" viewBox="0 0 100 100" class="w-full h-full">
+                        <ellipse cx="50" cy="55" rx="35" ry="28" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <path d="M 22 35 Q 18 15 35 28 Z" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <path d="M 78 35 Q 82 15 65 28 Z" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <circle cx="72" cy="26" r="7" fill="#ff1493" stroke="#333" stroke-width="2"/>
+                        <ellipse cx="62" cy="22" rx="7" ry="5" fill="#ff69b4" stroke="#333" stroke-width="2" transform="rotate(-15 62 22)"/>
+                        <ellipse cx="82" cy="30" rx="7" ry="5" fill="#ff69b4" stroke="#333" stroke-width="2" transform="rotate(15 82 30)"/>
+                        <ellipse cx="38" cy="55" rx="3" ry="5" fill="#333"/>
+                        <ellipse cx="62" cy="55" rx="3" ry="5" fill="#333"/>
+                        <ellipse cx="50" cy="60" rx="4" ry="3" fill="#ffda6a" stroke="#333" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black leading-tight flex items-center justify-center sm:justify-start gap-1.5 tracking-wide">
+                        Sanrio Sales <span class="text-xs bg-white text-hkDeepPink font-extrabold px-2 py-0.5 rounded-full shadow-sm">Hello Kitty ✨</span>
+                    </h1>
+                    <p class="text-xs text-pink-100 font-semibold">Gestão de Vendas Automática & Fofinha</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-2 w-full sm:w-auto">
+                <button onclick="openSyncModal()" title="Sincronizar na Nuvem" class="btn-kawaii inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-extrabold px-3 py-2 rounded-2xl transition backdrop-blur-sm border border-white/30">
+                    <span>☁️</span> <span class="hidden sm:inline">Nuvem / Sincronizar</span>
+                </button>
+                <button onclick="openHelpModal()" title="Como baixar no celular" class="btn-kawaii inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-extrabold px-3 py-2 rounded-2xl transition backdrop-blur-sm border border-white/30">
+                    <span>📱</span> <span class="hidden sm:inline">Instalar App</span>
+                </button>
+                <button onclick="exportDataCSV()" title="Exportar para Excel" class="btn-kawaii inline-flex items-center gap-1.5 bg-pink-100 text-hkDeepPink hover:bg-white text-xs font-extrabold px-3 py-2 rounded-2xl transition shadow-sm">
+                    <span>📊</span> <span class="hidden sm:inline">Excel</span>
+                </button>
+                <button onclick="openModal()" class="btn-kawaii inline-flex items-center gap-2 bg-white text-hkDeepPink hover:bg-pink-50 font-black text-sm px-4 py-2.5 rounded-2xl transition duration-200 shadow-md">
+                    <span>➕</span> <span>Nova Venda 🎀</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container com Espaçamento Amplo -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex-grow w-full space-y-8">
+        <!-- Cards de Métricas com Interações por Clique -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- Card 1: Total Vendido (Hello Kitty) -->
+            <div onclick="interactCharacter('svg-hk', 'hk')" class="sanrio-card-anim bg-white rounded-3xl p-5 hk-shadow border-2 border-pink-100 flex items-center justify-between cursor-pointer active:scale-95">
+                <div>
+                    <p class="text-xs font-bold text-pink-500 uppercase tracking-wider flex items-center gap-1">🎀 Total Vendido</p>
+                    <p id="card-total" class="text-2xl font-black text-slate-800 mt-1">R$ 0,00</p>
+                    <span class="text-xs text-pink-400 font-semibold mt-1 block" id="card-count-total">0 vendas registradas</span>
+                </div>
+                <!-- Hello Kitty Badge Detalhada -->
+                <div class="sanrio-avatar-anim w-14 h-14 rounded-2xl bg-pink-50 flex items-center justify-center border-2 border-pink-200 p-1">
+                    <svg id="svg-hk" viewBox="0 0 100 100" class="w-12 h-12">
+                        <ellipse cx="50" cy="55" rx="35" ry="28" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <path d="M 22 35 Q 18 15 35 28 Z" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <path d="M 78 35 Q 82 15 65 28 Z" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <circle cx="72" cy="26" r="7" fill="#ff1493" stroke="#333" stroke-width="2"/>
+                        <ellipse cx="62" cy="22" rx="7" ry="5" fill="#ff69b4" stroke="#333" stroke-width="2" transform="rotate(-15 62 22)"/>
+                        <ellipse cx="82" cy="30" rx="7" ry="5" fill="#ff69b4" stroke="#333" stroke-width="2" transform="rotate(15 82 30)"/>
+                        <ellipse cx="38" cy="55" rx="3" ry="5" fill="#333"/>
+                        <ellipse cx="62" cy="55" rx="3" ry="5" fill="#333"/>
+                        <ellipse cx="50" cy="60" rx="4" ry="3" fill="#ffda6a" stroke="#333" stroke-width="1.5"/>
+                        <line x1="18" y1="52" x2="8" y2="50" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="18" y1="58" x2="8" y2="60" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="82" y1="52" x2="92" y2="50" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="82" y1="58" x2="92" y2="60" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Card 2: Total Recebido (Cinnamoroll) -->
+            <div onclick="interactCharacter('svg-cinnamoroll', 'cinnamoroll')" class="sanrio-card-anim bg-white rounded-3xl p-5 hk-shadow border-2 border-pink-100 flex items-center justify-between cursor-pointer active:scale-95">
+                <div>
+                    <p class="text-xs font-bold text-emerald-500 uppercase tracking-wider flex items-center gap-1">☁️ Recebido (Pagas)</p>
+                    <p id="card-received" class="text-2xl font-black text-emerald-600 mt-1">R$ 0,00</p>
+                    <span class="text-xs text-emerald-600/80 font-bold mt-1 block">À Vista + Quitado ✨</span>
+                </div>
+                <!-- Cinnamoroll Badge Detalhado -->
+                <div class="sanrio-avatar-anim w-14 h-14 rounded-2xl bg-cyan-50 flex items-center justify-center border-2 border-cyan-200 p-1">
+                    <svg id="svg-cinnamoroll" viewBox="0 0 100 100" class="w-12 h-12">
+                        <path d="M 28 50 C 0 45 -5 70 24 62 Z" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <path d="M 72 50 C 100 45 105 70 76 62 Z" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <ellipse cx="50" cy="52" rx="28" ry="20" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <ellipse cx="40" cy="52" rx="3" ry="4.5" fill="#00bfff"/>
+                        <ellipse cx="60" cy="52" rx="3" ry="4.5" fill="#00bfff"/>
+                        <ellipse cx="32" cy="56" rx="4" ry="2.5" fill="#ffb6c1"/>
+                        <ellipse cx="68" cy="56" rx="4" ry="2.5" fill="#ffb6c1"/>
+                        <path d="M 47 57 Q 50 60 53 57" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Card 3: A Receber (My Melody) -->
+            <div onclick="interactCharacter('svg-melody', 'melody')" class="sanrio-card-anim bg-white rounded-3xl p-5 hk-shadow border-2 border-pink-100 flex items-center justify-between cursor-pointer active:scale-95">
+                <div>
+                    <p class="text-xs font-bold text-amber-500 uppercase tracking-wider flex items-center gap-1">🌸 A Receber (A Prazo)</p>
+                    <p id="card-pending" class="text-2xl font-black text-amber-500 mt-1">R$ 0,00</p>
+                    <span class="text-xs text-amber-600 font-bold mt-1 block" id="card-count-pending">0 pendentes</span>
+                </div>
+                <!-- My Melody Badge Detalhada -->
+                <div class="sanrio-avatar-anim w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center border-2 border-rose-200 p-1">
+                    <svg id="svg-melody" viewBox="0 0 100 100" class="w-12 h-12">
+                        <path d="M 35 45 C 18 10 38 5 46 36 Z" fill="#ff69b4" stroke="#333" stroke-width="3.5"/>
+                        <path d="M 65 45 C 82 10 62 5 54 36 Z" fill="#ff69b4" stroke="#333" stroke-width="3.5"/>
+                        <ellipse cx="50" cy="48" rx="28" ry="23" fill="#ff69b4" stroke="#333" stroke-width="3.5"/>
+                        <ellipse cx="50" cy="54" rx="19" ry="14" fill="#FFFFFF"/>
+                        <circle cx="32" cy="38" r="5" fill="#ffda6a" stroke="#333" stroke-width="2"/>
+                        <ellipse cx="43" cy="53" rx="2.5" ry="4" fill="#333"/>
+                        <ellipse cx="57" cy="53" rx="2.5" ry="4" fill="#333"/>
+                        <ellipse cx="50" cy="57" rx="3" ry="2" fill="#ffda6a"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Card 4: Em Atraso (Kuromi) -->
+            <div onclick="interactCharacter('svg-kuromi', 'kuromi')" class="sanrio-card-anim bg-white rounded-3xl p-5 hk-shadow border-2 border-pink-100 flex items-center justify-between cursor-pointer active:scale-95">
+                <div>
+                    <p class="text-xs font-bold text-hkPurple uppercase tracking-wider flex items-center gap-1">🖤 Em Atraso</p>
+                    <p id="card-overdue" class="text-2xl font-black text-hkRed mt-1">R$ 0,00</p>
+                    <span class="text-xs text-hkRed font-bold mt-1 block" id="card-count-overdue">0 atrasadas</span>
+                </div>
+                <!-- Kuromi Badge Detalhada -->
+                <div class="sanrio-avatar-anim w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center border-2 border-purple-200 p-1">
+                    <svg id="svg-kuromi" viewBox="0 0 100 100" class="w-12 h-12">
+                        <path d="M 28 45 L 8 15 L 40 35 Z" fill="#333333" stroke="#333" stroke-width="2.5"/>
+                        <path d="M 72 45 L 92 15 L 60 35 Z" fill="#333333" stroke="#333" stroke-width="2.5"/>
+                        <circle cx="10" cy="17" r="3.5" fill="#ff1493"/>
+                        <circle cx="90" cy="17" r="3.5" fill="#ff1493"/>
+                        <ellipse cx="50" cy="52" rx="26" ry="21" fill="#FFFFFF" stroke="#333" stroke-width="3.5"/>
+                        <circle cx="50" cy="38" r="5.5" fill="#ff1493"/>
+                        <ellipse cx="40" cy="53" rx="3" ry="4" fill="#333" transform="rotate(10 40 53)"/>
+                        <ellipse cx="60" cy="53" rx="3" ry="4" fill="#333" transform="rotate(-10 60 53)"/>
+                        <ellipse cx="50" cy="58" rx="2" ry="1.5" fill="#ff1493"/>
+                    </svg>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Filtros e Busca -->
+        <section class="bg-white rounded-3xl p-4 hk-shadow border-2 border-pink-100 flex flex-col md:flex-row gap-3 justify-between items-center">
+            <div class="relative w-full md:w-80">
+                <input type="text" id="search-input" oninput="renderSales()" placeholder="🔎 Buscar por cliente ou produto..." 
+                    class="w-full px-4 py-2.5 bg-pink-50/50 border border-pink-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-hkPink font-semibold transition">
+            </div>
+
+            <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
+                <button onclick="setFilter('all')" id="filter-all" class="btn-kawaii filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition whitespace-nowrap bg-hkDeepPink text-white shadow-sm">Todas 🎀</button>
+                <button onclick="setFilter('paid')" id="filter-paid" class="btn-kawaii filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition whitespace-nowrap bg-pink-50 text-pink-600 hover:bg-pink-100">Pagas ✨</button>
+                <button onclick="setFilter('pending')" id="filter-pending" class="btn-kawaii filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition whitespace-nowrap bg-pink-50 text-pink-600 hover:bg-pink-100">A Receber ⏳</button>
+                <button onclick="setFilter('overdue')" id="filter-overdue" class="btn-kawaii filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition whitespace-nowrap bg-pink-50 text-pink-600 hover:bg-pink-100">Em Atraso 🖤</button>
+            </div>
+        </section>
+
+        <!-- Tabela de Vendas Sanrio -->
+        <section class="bg-white rounded-3xl hk-shadow border-2 border-pink-100 overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-pink-50 to-rose-50 border-b border-pink-100 flex justify-between items-center">
+                <h2 class="font-extrabold text-hkDeepPink text-base flex items-center gap-2">
+                    <span>🎀</span> Lista de Vendas Sanrio
+                </h2>
+                <span id="sales-counter-badge" class="text-xs bg-pink-100 text-hkDeepPink font-extrabold px-3 py-1 rounded-full border border-pink-200">
+                    0 vendas
+                </span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-pink-50/80 border-b border-pink-100 text-[11px] font-black text-pink-500 uppercase tracking-wider">
+                            <th class="py-3.5 px-4">Foto</th>
+                            <th class="py-3.5 px-4">Data/Hora</th>
+                            <th class="py-3.5 px-4">Cliente</th>
+                            <th class="py-3.5 px-4">Produto</th>
+                            <th class="py-3.5 px-4">Valor</th>
+                            <th class="py-3.5 px-4">Tipo</th>
+                            <th class="py-3.5 px-4">Vencimento</th>
+                            <th class="py-3.5 px-4">Status</th>
+                            <th class="py-3.5 px-4 text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-table-body" class="divide-y divide-pink-50 text-sm">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State com Pompompurin -->
+            <div id="empty-state" class="py-12 px-4 text-center hidden">
+                <div class="w-20 h-20 mx-auto mb-3 bg-amber-50 rounded-full flex items-center justify-center border-2 border-amber-200 p-2">
+                    <svg viewBox="0 0 100 100" class="w-16 h-16">
+                        <ellipse cx="50" cy="22" rx="14" ry="5" fill="#5c3a21"/>
+                        <ellipse cx="50" cy="55" rx="35" ry="28" fill="#fff3a1" stroke="#5c3a21" stroke-width="3"/>
+                        <path d="M 18 45 Q 8 65 22 70 Z" fill="#fff3a1" stroke="#5c3a21" stroke-width="3"/>
+                        <path d="M 82 45 Q 92 65 78 70 Z" fill="#fff3a1" stroke="#5c3a21" stroke-width="3"/>
+                        <ellipse cx="40" cy="55" rx="2.5" ry="4" fill="#5c3a21"/>
+                        <ellipse cx="60" cy="55" rx="2.5" ry="4" fill="#5c3a21"/>
+                        <ellipse cx="50" cy="60" rx="3" ry="2" fill="#5c3a21"/>
+                    </svg>
+                </div>
+                <p class="text-slate-800 font-extrabold text-base">Nenhuma venda cadastrada!</p>
+                <p class="text-xs text-pink-400 mt-1 max-w-sm mx-auto font-semibold">Clique no botão "Nova Venda 🎀" acima para cadastrar sua primeira venda.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Form (Criar/Editar Venda) -->
+    <div id="sale-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border-2 border-pink-200" id="modal-container">
+            <div class="bg-gradient-to-r from-hkPink to-hkDeepPink text-white px-6 py-4 flex justify-between items-center">
+                <h3 id="modal-title" class="font-extrabold text-lg flex items-center gap-2">
+                    <span>🎀</span> Registrar Nova Venda
+                </h3>
+                <button type="button" onclick="closeModal()" class="text-white font-bold bg-white/20 hover:bg-white/40 w-8 h-8 rounded-full flex items-center justify-center">✕</button>
+            </div>
+
+            <form id="sale-form" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4 bg-pink-50/20">
+                <input type="hidden" id="sale-id">
+
+                <!-- Upload de Foto do Produto -->
+                <div class="bg-pink-100/50 p-3 rounded-2xl border border-pink-200">
+                    <label class="block text-xs font-extrabold text-pink-600 uppercase mb-1">📸 Foto do Produto (Opcional)</label>
+                    <input type="file" id="sale-image" accept="image/*" onchange="previewImage(event)" class="text-xs text-pink-600 block w-full file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-hkDeepPink file:text-white">
+                    <div id="image-preview-container" class="mt-2 hidden flex items-center gap-3">
+                        <img id="image-preview" class="w-14 h-14 object-cover rounded-xl border-2 border-pink-300">
+                        <button type="button" onclick="removeImage()" class="text-xs bg-rose-100 text-rose-600 px-2 py-1 rounded-lg font-bold">Remover foto</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-pink-500 uppercase mb-1">Data e Hora da Venda</label>
+                    <input type="datetime-local" id="sale-datetime" required class="w-full px-3 py-2.5 bg-white border border-pink-200 rounded-2xl text-sm font-semibold">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-pink-500 uppercase mb-1">Nome do Cliente *</label>
+                    <input type="text" id="sale-client" required placeholder="Ex: Maria Clara 💖" class="w-full px-3 py-2.5 bg-white border border-pink-200 rounded-2xl text-sm font-semibold">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-pink-500 uppercase mb-1">Produto ou Serviço *</label>
+                    <input type="text" id="sale-product" required placeholder="Ex: Kit Maquiagem Hello Kitty..." class="w-full px-3 py-2.5 bg-white border border-pink-200 rounded-2xl text-sm font-semibold">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-pink-500 uppercase mb-1">Valor Total (R$) *</label>
+                    <input type="number" id="sale-value" step="0.01" min="0.01" required placeholder="0,00" class="w-full px-3 py-2.5 bg-white border border-pink-200 rounded-2xl text-sm font-black text-slate-800">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-1">
+                    <div>
+                        <label class="block text-xs font-extrabold text-pink-500 uppercase mb-1">Pagamento *</label>
+                        <select id="sale-payment-type" onchange="toggleDueDateField()" class="w-full py-2.5 px-3 bg-white border border-pink-200 rounded-2xl text-sm font-bold">
+                            <option value="avista">À Vista 💵</option>
+                            <option value="aprazo">A Prazo / Fiado 🗓️</option>
+                        </select>
+                    </div>
+
+                    <div id="due-date-container" class="opacity-50 pointer-events-none transition-all">
+                        <label class="block text-xs font-extrabold text-amber-600 uppercase mb-1">Data Vencimento</label>
+                        <input type="date" id="sale-due-date" class="w-full py-2.5 px-3 bg-amber-50/80 border border-amber-300 rounded-2xl text-sm font-bold">
+                    </div>
+                </div>
+
+                <div id="status-container" class="hidden pt-2">
+                    <label class="block text-xs font-extrabold text-pink-500 uppercase mb-1">Status do Pagamento</label>
+                    <select id="sale-status" class="w-full py-2.5 px-3 bg-white border border-pink-200 rounded-2xl text-sm font-bold">
+                        <option value="pago">Pago / Quitado ✨</option>
+                        <option value="pendente">Pendente / A Receber ⏳</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-pink-100">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2.5 border border-pink-200 text-pink-500 font-bold rounded-2xl hover:bg-pink-50 text-sm">Cancelar</button>
+                    <button type="submit" class="px-6 py-2.5 bg-hkDeepPink hover:bg-pink-700 text-white font-extrabold rounded-2xl text-sm">Salvar Venda 💖</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Sincronização na Nuvem -->
+    <div id="sync-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border-2 border-pink-200">
+            <div class="bg-gradient-to-r from-hkPink to-hkDeepPink text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-bold text-lg flex items-center gap-2">☁️ Sincronização em Nuvem</h3>
+                <button type="button" onclick="closeSyncModal()" class="text-white font-bold bg-white/20 w-8 h-8 rounded-full">✕</button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-slate-600">
+                <p class="font-semibold text-xs">Use a mesma **Chave de Conexão** no seu computador e celular para sincronizar suas vendas:</p>
+                <div>
+                    <label class="block text-xs font-extrabold text-pink-600 uppercase mb-1">Sua Chave de Conexão:</label>
+                    <input type="text" id="sync-key-input" class="w-full px-3 py-2 bg-pink-50 border border-pink-300 rounded-xl text-center font-black text-slate-800 text-base">
+                </div>
+                <button type="button" onclick="applySyncKey()" class="w-full py-2.5 bg-hkDeepPink text-white font-extrabold rounded-2xl text-sm">Conectar e Sincronizar ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Exclusão -->
+    <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden border-2 border-pink-200 text-center p-6 space-y-4">
+            <div class="text-5xl">🗑️</div>
+            <div>
+                <h4 class="text-base font-extrabold text-slate-800">Apagar Venda? 🎀</h4>
+                <p class="text-xs text-pink-500 font-semibold mt-1" id="delete-modal-msg">Tem certeza que deseja apagar esta venda?</p>
+            </div>
+            <div class="flex justify-center gap-3 pt-2">
+                <button type="button" onclick="closeDeleteModal()" class="w-1/2 py-2.5 border border-pink-200 text-slate-600 font-bold rounded-2xl text-xs hover:bg-pink-50">Cancelar</button>
+                <button type="button" id="confirm-delete-btn" class="w-1/2 py-2.5 bg-hkRed hover:bg-rose-700 text-white font-extrabold rounded-2xl text-xs">Sim, Apagar 🗑️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Baixar no Celular -->
+    <div id="help-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border-2 border-pink-200">
+            <div class="bg-gradient-to-r from-hkPink to-hkDeepPink text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-bold text-lg flex items-center gap-2">📱 Baixar App no Celular</h3>
+                <button type="button" onclick="closeHelpModal()" class="text-white font-bold bg-white/20 w-8 h-8 rounded-full">✕</button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-slate-600">
+                <p class="font-bold text-hkDeepPink text-base">Instale o aplicativo na sua tela inicial! 🎀</p>
+                <div class="space-y-2 bg-pink-50/50 p-4 rounded-2xl border border-pink-100">
+                    <p class="font-bold text-slate-800">🤖 Android (Google Chrome):</p>
+                    <ol class="list-decimal pl-5 space-y-1 text-xs">
+                        <li>Abra o site no <b>Chrome</b>.</li>
+                        <li>Toque nos <b>3 pontinhos (⋮)</b> no topo.</li>
+                        <li>Selecione <b>"Adicionar à tela inicial"</b> ou <b>"Instalar App"</b>.</li>
+                    </ol>
+                </div>
+                <div class="space-y-2 bg-pink-50/50 p-4 rounded-2xl border border-pink-100">
+                    <p class="font-bold text-slate-800">🍎 iPhone (Safari):</p>
+                    <ol class="list-decimal pl-5 space-y-1 text-xs">
+                        <li>Abra o site no <b>Safari</b>.</li>
+                        <li>Toque no botão <b>Compartilhar</b> (quadradinho com seta).</li>
+                        <li>Selecione <b>"Adicionar à Tela de Início"</b>.</li>
+                    </ol>
+                </div>
+                <button type="button" onclick="closeHelpModal()" class="w-full py-2.5 bg-hkDeepPink text-white font-extrabold rounded-2xl text-sm">Entendi! 💖</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container Toast -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <!-- Script de Interatividade, Estado das Vendas e Sons Kawaii -->
+    <script>
+        const STORAGE_KEY = 'vendas_hello_kitty_sanrio_v4';
+        const SYNC_KEY_STORE = 'hk_sync_key';
+        let sales = [];
+        let currentFilter = 'all';
+        let saleToDeleteId = null;
+        let currentImageData = '';
+        let userSyncKey = localStorage.getItem(SYNC_KEY_STORE) || 'SANRIO-' + Math.floor(100000 + Math.random() * 900000);
+
+        // Inicializador da Aplicação
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSales();
+            renderSales();
+        });
+
+        function getCurrentDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function loadSales() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    sales = JSON.parse(stored);
+                } catch (e) {
+                    sales = [];
+                }
+            } else {
+                sales = [
+                    {
+                        id: '101',
+                        datetime: getCurrentDateTime(),
+                        client: 'Juliana Paes 🎀',
+                        product: 'Perfume Hello Kitty Floral',
+                        value: 120.00,
+                        paymentType: 'avista',
+                        dueDate: '',
+                        status: 'pago',
+                        image: ''
+                    },
+                    {
+                        id: '102',
+                        datetime: getCurrentDateTime(),
+                        client: 'Beatriz Lima ✨',
+                        product: 'Bolsa My Melody',
+                        value: 95.00,
+                        paymentType: 'aprazo',
+                        dueDate: getCurrentDate(),
+                        status: 'pendente',
+                        image: ''
+                    }
+                ];
+                saveSales();
+            }
+        }
+
+        function saveSales() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(sales));
+            updateMetrics();
+        }
+
+        // Gerador de Som Kawaii via Web Audio API
+        function playKawaiiSound(type) {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                const now = ctx.currentTime;
+
+                if (type === 'hk') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.15);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                } else if (type === 'cinnamoroll') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(659.25, now);
+                    osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.2);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'melody') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, now);
+                    osc.frequency.exponentialRampToValueAtTime(1174.66, now + 0.25);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'kuromi') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                }
+            } catch (e) {}
+        }
+
+        function interactCharacter(elementId, charName) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            playKawaiiSound(charName);
+
+            el.classList.remove('anim-hk-click', 'anim-cinnamoroll-click', 'anim-melody-click', 'anim-kuromi-click');
+            void el.offsetWidth;
+
+            if (charName === 'hk') el.classList.add('anim-hk-click');
+            else if (charName === 'cinnamoroll') el.classList.add('anim-cinnamoroll-click');
+            else if (charName === 'melody') el.classList.add('anim-melody-click');
+            else if (charName === 'kuromi') el.classList.add('anim-kuromi-click');
+
+            const rect = el.getBoundingClientRect();
+            const emojiList = charName === 'hk' ? ['🎀', '✨', '💖'] : 
+                              charName === 'cinnamoroll' ? ['☁️', '✨', '🩵'] : 
+                              charName === 'melody' ? ['🌸', '✨', '💕'] : ['🖤', '⚡', '✨'];
+
+            for (let i = 0; i < 4; i++) {
+                spawnParticle(
+                    rect.left + rect.width / 2 + (Math.random() * 40 - 20),
+                    rect.top + rect.height / 2 + (Math.random() * 40 - 20),
+                    emojiList[Math.floor(Math.random() * emojiList.length)]
+                );
+            }
+        }
+
+        function spawnParticle(x, y, char = '✨') {
+            const particle = document.createElement('div');
+            particle.className = 'sparkle-particle';
+            particle.textContent = char;
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 800);
+        }
+
+        function openModal(editId = null) {
+            const modal = document.getElementById('sale-modal');
+            const form = document.getElementById('sale-form');
+            const title = document.getElementById('modal-title');
+            const statusContainer = document.getElementById('status-container');
+
+            form.reset();
+            removeImage();
+
+            if (editId) {
+                const sale = sales.find(s => String(s.id) === String(editId));
+                if (!sale) return;
+
+                title.innerHTML = `<span>🎀</span> Editar Venda`;
+                document.getElementById('sale-id').value = sale.id;
+                document.getElementById('sale-datetime').value = sale.datetime || getCurrentDateTime();
+                document.getElementById('sale-client').value = sale.client || '';
+                document.getElementById('sale-product').value = sale.product || '';
+                document.getElementById('sale-value').value = sale.value || '';
+                document.getElementById('sale-payment-type').value = sale.paymentType || 'avista';
+                document.getElementById('sale-due-date').value = sale.dueDate || '';
+                document.getElementById('sale-status').value = sale.status || 'pago';
+
+                if (sale.image) {
+                    currentImageData = sale.image;
+                    document.getElementById('image-preview').src = currentImageData;
+                    document.getElementById('image-preview-container').classList.remove('hidden');
+                }
+
+                statusContainer.classList.remove('hidden');
+            } else {
+                title.innerHTML = `<span>🎀</span> Registrar Nova Venda`;
+                document.getElementById('sale-id').value = '';
+                document.getElementById('sale-datetime').value = getCurrentDateTime();
+                document.getElementById('sale-due-date').value = getCurrentDate();
+                statusContainer.classList.add('hidden');
+            }
+
+            toggleDueDateField();
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeModal() {
+            document.getElementById('sale-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageData = e.target.result;
+                    document.getElementById('image-preview').src = currentImageData;
+                    document.getElementById('image-preview-container').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage() {
+            currentImageData = '';
+            const imgInput = document.getElementById('sale-image');
+            if (imgInput) imgInput.value = '';
+            const container = document.getElementById('image-preview-container');
+            if (container) container.classList.add('hidden');
+        }
+
+        function toggleDueDateField() {
+            const payType = document.getElementById('sale-payment-type').value;
+            const dueDateContainer = document.getElementById('due-date-container');
+            if (payType === 'aprazo') {
+                dueDateContainer.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                dueDateContainer.classList.add('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('sale-id').value;
+            const datetime = document.getElementById('sale-datetime').value;
+            const client = document.getElementById('sale-client').value.trim();
+            const product = document.getElementById('sale-product').value.trim();
+            const value = parseFloat(document.getElementById('sale-value').value) || 0;
+            const paymentType = document.getElementById('sale-payment-type').value;
+            const dueDate = paymentType === 'aprazo' ? document.getElementById('sale-due-date').value : '';
+            let status = paymentType === 'avista' ? 'pago' : 'pendente';
+            
+            if (id) {
+                status = document.getElementById('sale-status').value;
+                const idx = sales.findIndex(s => String(s.id) === String(id));
+                if (idx !== -1) {
+                    sales[idx] = { id: String(id), datetime, client, product, value, paymentType, dueDate, status, image: currentImageData };
+                    showToast('Venda atualizada com sucesso! 💖');
+                }
+            } else {
+                sales.unshift({
+                    id: String(Date.now()),
+                    datetime,
+                    client,
+                    product,
+                    value,
+                    paymentType,
+                    dueDate,
+                    status,
+                    image: currentImageData
+                });
+                showToast('Nova venda cadastrada! ✨');
+            }
+
+            saveSales();
+            renderSales();
+            closeModal();
+        }
+
+        function isOverdue(sale) {
+            if (sale.status === 'pago' || sale.paymentType === 'avista' || !sale.dueDate) return false;
+            return sale.dueDate < getCurrentDate();
+        }
+
+        function togglePaidStatus(id) {
+            const sale = sales.find(s => String(s.id) === String(id));
+            if (sale) {
+                sale.status = sale.status === 'pago' ? 'pendente' : 'pago';
+                saveSales();
+                renderSales();
+                showToast(sale.status === 'pago' ? 'Venda marcada como PAGA! ✨' : 'Venda marcada como PENDENTE! ⏳');
+            }
+        }
+
+        function confirmDeleteSale(id) {
+            const sale = sales.find(s => String(s.id) === String(id));
+            if (!sale) return;
+
+            saleToDeleteId = String(id);
+            document.getElementById('delete-modal-msg').textContent = `Deseja apagar a venda de "${sale.client}"?`;
+            document.getElementById('confirm-delete-btn').onclick = executeDelete;
+
+            document.getElementById('delete-modal').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.add('opacity-0', 'pointer-events-none');
+            saleToDeleteId = null;
+        }
+
+        function executeDelete() {
+            if (!saleToDeleteId) return;
+            sales = sales.filter(s => String(s.id) !== String(saleToDeleteId));
+            saveSales();
+            renderSales();
+            showToast('Venda apagada com sucesso! 🗑️');
+            closeDeleteModal();
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = 'filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition whitespace-nowrap bg-pink-50 text-pink-600 hover:bg-pink-100';
+            });
+            const active = document.getElementById(`filter-${filter}`);
+            if (active) active.className = 'filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition whitespace-nowrap bg-hkDeepPink text-white shadow-sm';
+            renderSales();
+        }
+
+        function renderSales() {
+            const tbody = document.getElementById('sales-table-body');
+            const emptyState = document.getElementById('empty-state');
+            const searchVal = (document.getElementById('search-input').value || '').toLowerCase().trim();
+
+            tbody.innerHTML = '';
+
+            let filtered = sales.filter(sale => {
+                const match = (sale.client || '').toLowerCase().includes(searchVal) || (sale.product || '').toLowerCase().includes(searchVal);
+                if (!match) return false;
+                if (currentFilter === 'paid') return sale.status === 'pago';
+                if (currentFilter === 'pending') return sale.status === 'pendente' && !isOverdue(sale);
+                if (currentFilter === 'overdue') return isOverdue(sale);
+                return true;
+            });
+
+            document.getElementById('sales-counter-badge').textContent = `${filtered.length} venda(s)`;
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+
+                filtered.forEach(sale => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-pink-50/60 transition';
+
+                    const dateObj = new Date(sale.datetime);
+                    const formattedDate = isNaN(dateObj.getTime()) ? sale.datetime : dateObj.toLocaleDateString('pt-BR');
+                    const formattedTime = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                    let formattedDueDate = '-';
+                    if (sale.dueDate) {
+                        const parts = sale.dueDate.split('-');
+                        if (parts.length === 3) formattedDueDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                    }
+
+                    const overdue = isOverdue(sale);
+                    const statusBadge = sale.status === 'pago' 
+                        ? `<span class="px-2.5 py-1 rounded-full font-extrabold bg-emerald-100 text-emerald-800 text-xs">Pago ✨</span>`
+                        : overdue 
+                        ? `<span class="px-2.5 py-1 rounded-full font-extrabold bg-rose-100 text-hkRed text-xs">Atrasado 🖤</span>`
+                        : `<span class="px-2.5 py-1 rounded-full font-extrabold bg-amber-100 text-amber-800 text-xs">Pendente ⏳</span>`;
+
+                    const payTypeBadge = sale.paymentType === 'avista' 
+                        ? `<span class="text-xs font-extrabold text-pink-700 bg-pink-100 px-2.5 py-0.5 rounded-lg">À Vista 💵</span>` 
+                        : `<span class="text-xs font-extrabold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg border border-amber-200">A Prazo 🗓️</span>`;
+
+                    const imgHtml = sale.image 
+                        ? `<img src="${sale.image}" class="w-10 h-10 object-cover rounded-xl border border-pink-200 shadow-sm">` 
+                        : `<div class="w-10 h-10 bg-pink-100/60 rounded-xl flex items-center justify-center text-pink-400 font-bold text-xs">🛍️</div>`;
+
+                    tr.innerHTML = `
+                        <td class="py-3 px-4">${imgHtml}</td>
+                        <td class="py-3 px-4 whitespace-nowrap">
+                            <div class="font-extrabold text-slate-700">${formattedDate}</div>
+                            <div class="text-xs text-pink-400 font-semibold">${formattedTime}</div>
+                        </td>
+                        <td class="py-3 px-4 font-extrabold text-slate-800 whitespace-nowrap">${escapeHTML(sale.client)}</td>
+                        <td class="py-3 px-4 text-slate-600 font-semibold">${escapeHTML(sale.product)}</td>
+                        <td class="py-3 px-4 font-black text-hkDeepPink whitespace-nowrap">R$ ${(sale.value || 0).toFixed(2).replace('.', ',')}</td>
+                        <td class="py-3 px-4 whitespace-nowrap">${payTypeBadge}</td>
+                        <td class="py-3 px-4 whitespace-nowrap ${overdue ? 'text-hkRed font-extrabold' : 'text-slate-600 font-semibold'}">${formattedDueDate}</td>
+                        <td class="py-3 px-4 whitespace-nowrap">${statusBadge}</td>
+                        <td class="py-3 px-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end gap-1.5">
+                                <button onclick="togglePaidStatus('${sale.id}')" title="Dar Baixa" class="btn-kawaii p-2 rounded-xl border border-pink-200 hover:bg-emerald-50 text-slate-700 font-bold hover:scale-110">
+                                    ${sale.status === 'pago' ? '🔄' : '✅'}
+                                </button>
+                                <button onclick="openModal('${sale.id}')" title="Editar" class="btn-kawaii p-2 rounded-xl border border-pink-200 hover:bg-pink-100 text-slate-700 font-bold hover:scale-110">
+                                    ✏️
+                                </button>
+                                <button onclick="confirmDeleteSale('${sale.id}')" title="Apagar" class="btn-kawaii p-2 rounded-xl border border-rose-200 hover:bg-rose-100 text-rose-500 font-bold hover:scale-110">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            updateMetrics();
+        }
+
+        function updateMetrics() {
+            let total = 0, received = 0, pending = 0, overdueTotal = 0;
+            let countPending = 0, countOverdue = 0;
+
+            sales.forEach(sale => {
+                const val = sale.value || 0;
+                total += val;
+                if (sale.status === 'pago') {
+                    received += val;
+                } else {
+                    pending += val;
+                    countPending++;
+                    if (isOverdue(sale)) {
+                        overdueTotal += val;
+                        countOverdue++;
+                    }
+                }
+            });
+
+            document.getElementById('card-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('card-count-total').textContent = `${sales.length} vendas registradas`;
+            document.getElementById('card-received').textContent = `R$ ${received.toFixed(2).replace('.', ',')}`;
+            document.getElementById('card-pending').textContent = `R$ ${pending.toFixed(2).replace('.', ',')}`;
+            document.getElementById('card-count-pending').textContent = `${countPending} venda(s) a receber`;
+            document.getElementById('card-overdue').textContent = `R$ ${overdueTotal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('card-count-overdue').textContent = `${countOverdue} cobrança(s) em atraso`;
+        }
+
+        function openSyncModal() {
+            document.getElementById('sync-key-input').value = userSyncKey;
+            document.getElementById('sync-modal').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeSyncModal() {
+            document.getElementById('sync-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function applySyncKey() {
+            const val = document.getElementById('sync-key-input').value.trim();
+            if (val) {
+                userSyncKey = val;
+                localStorage.setItem(SYNC_KEY_STORE, userSyncKey);
+                showToast('Chave de conexão salva! ☁️');
+                closeSyncModal();
+            }
+        }
+
+        function openHelpModal() {
+            document.getElementById('help-modal').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-hkDeepPink text-white text-xs font-extrabold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 transition-all duration-300 opacity-100 border border-pink-300';
+            toast.innerHTML = `✨ ${escapeHTML(msg)}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function exportDataCSV() {
+            if (sales.length === 0) return alert('Nenhuma venda para exportar.');
+            let csv = "data:text/csv;charset=utf-8,Data,Cliente,Produto,Valor,Pagamento,Vencimento,Status\n";
+            sales.forEach(s => {
+                csv += `"${s.datetime}","${s.client}","${s.product}","${s.value}","${s.paymentType}","${s.dueDate}","${s.status}"\n`;
+            });
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download = `vendas_hello_kitty.csv`;
+            link.click();
+        }
+
+        function escapeHTML(str) {
+            return String(str || '').replace(/[&<>'"]/g, tag => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[tag] || tag));
+        }
+    </script>
+</body>
+</html>
