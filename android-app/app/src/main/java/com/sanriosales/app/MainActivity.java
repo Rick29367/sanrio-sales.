@@ -15,8 +15,8 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-    private static final String HOME_URL = "https://sanrio-sales-teste.netlify.app/";
-    private static final String HOME_HOST = "sanrio-sales-teste.netlify.app";
+    private static final String HOME_URL = "https://sanrio-sales.netlify.app/";
+    private static final String HOME_HOST = "sanrio-sales.netlify.app";
 
     private WebView webView;
     private ValueCallback<Uri[]> fileChooserCallback;
